@@ -8,6 +8,7 @@ const { PORT } = require('./config');
 
 const notesRouter = require('./routes/notes');
 const foldersRouter = require('./routes/folders');
+const tagsRouter = require('./routes/tags');
 // Create an Express application
 const app = express();
 
@@ -28,6 +29,8 @@ app.use('/api/notes', notesRouter);
 
 app.use('/api/folders', foldersRouter);
 
+app.use('/api/tags', tagsRouter);
+
 // Custom 404 Not Found route handler
 app.use((req, res, next) => {
   const err = new Error('Not Found');
@@ -42,7 +45,7 @@ app.use((err, req, res, next) => {
     res.status(err.status).json(errBody);
   } else {
     console.error(err);
-    res.status(500).json({ message: 'Internal Server Error' });
+    res.status(500).json({ message: err.message });
   }
 });
 

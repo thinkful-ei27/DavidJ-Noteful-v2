@@ -1,4 +1,13 @@
-DROP TABLE IF EXISTS notes;
+DROP TABLE IF EXISTS notes_tags;
+ DROP TABLE IF EXISTS tags;
+ DROP TABLE IF EXISTS notes;
+ DROP TABLE IF EXISTS folders;
+
+ CREATE TABLE folders(
+    id serial PRIMARY KEY,
+   name text NOT NULL
+);
+
 CREATE TABLE notes(
     id serial PRIMARY KEY ,
     title text NOT NULL,
@@ -8,17 +17,23 @@ CREATE TABLE notes(
     folder_id int REFERENCES folders(id) ON DELETE SET NULL
 );
 
---CREATE TABLE tags(
---    id serial PRIMARY KEY,
---    name text NOT NULL
---)
-
---CREATE TABLE notes_tags (
- -- note_id INTEGER NOT NULL REFERENCES notes ON DELETE CASCADE,
- -- tag_id INTEGER NOT NULL REFERENCES tags ON DELETE CASCADE
---);
+CREATE TABLE tags(
+    id serial PRIMARY KEY,
+    name text NOT NULL
+);
+INSERT INTO tags(name) VALUES ('tag2');
 
 ALTER SEQUENCE notes_id_seq RESTART WITH 1000;
+
+
+ALTER SEQUENCE folders_id_seq RESTART WITH 100;
+
+INSERT INTO folders(name) VALUES
+('Archive'),
+('Drafts'),
+('Personal'),
+('Work');
+
 
 INSERT INTO notes (title, content, folder_id) VALUES 
   (
@@ -72,19 +87,14 @@ INSERT INTO notes (title, content, folder_id) VALUES
   ,101
   );
 
+CREATE TABLE notes_tags (
+  note_id INTEGER NOT NULL REFERENCES notes(id) ON DELETE CASCADE,
+  tag_id INTEGER NOT NULL REFERENCES tags(id) ON DELETE CASCADE
+);
 
---CREATE TABLE folders(
-    --id serial PRIMARY KEY,
-   -- name text NOT NULL
---);
+INSERT INTO notes_tags (note_id, tag_id) VALUES (1001, 1);
 
---ALTER SEQUENCE folders_id_seq RESTART WITH 100;
-
---INSERT INTO folders(name) VALUES
---('Archive'),
---('Drafts'),
---('Personal'),
---('Work');
+ 
 
 
 
